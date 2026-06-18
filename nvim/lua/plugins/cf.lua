@@ -59,8 +59,7 @@ return {
 
             local function do_submit(info)
                 local lines = vim.fn.readfile(info.file)
-                vim.fn.setreg("+", table.concat(lines, "
-"))
+                vim.fn.setreg("+", table.concat(lines, "\n"))
                 local paste_key = is_mac and "Cmd+V" or "Ctrl+V"
                 local url_hint = ""
                 if info.url then
