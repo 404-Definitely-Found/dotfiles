@@ -69,9 +69,18 @@ vim.keymap.set("n", "<leader>cg", function()
   vim.notify(result, vim.log.levels.INFO)
 end, { desc = "Git commit and push file" })
 
--- Open utop (OCaml REPL)
+-- Open utop and auto-load current file
 vim.keymap.set("n", "<leader>ou", function()
+  local filename = vim.fn.expand("%:t")
   vim.cmd("botright 15split | terminal utop")
-end, { desc = "Open utop (OCaml REPL)" })
+  local buf = vim.api.nvim_get_current_buf()
+  local chan = vim.b[buf].terminal_job_id
+  vim.defer_fn(function()
+    if chan and filename:match("%.ml$") then
+      vim.api.nvim_chan_send(chan, '#use "' .. filename .. '";;
+')
+    end
+  end, 1500)
+end, { desc = "Open utop and load current file" })
 
 return {}
