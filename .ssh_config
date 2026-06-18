@@ -5,6 +5,8 @@ Host pi4
   AddKeysToAgent yes
   LocalForward 10043 localhost:10043
   ExitOnForwardFailure no
+  PermitLocalCommand yes
+  LocalCommand kill $(cat /tmp/cp_listener.pid 2>/dev/null) 2>/dev/null; sleep 0.5; true
 
 Host github.com
   AddKeysToAgent yes
