@@ -61,12 +61,12 @@ return {
                 local lines = vim.fn.readfile(info.file)
                 vim.fn.setreg("+", table.concat(lines, "
 "))
-                if info.url then
-                    local url = submit_url_from_problem_url(info.url)
-                    vim.fn.system(open_cmd .. " " .. vim.fn.shellescape(url))
-                end
                 local paste_key = is_mac and "Cmd+V" or "Ctrl+V"
-                notify("Solution copied to clipboard — paste with " .. paste_key .. ", select GNU G++17 7.3.0, click Submit.")
+                local url_hint = ""
+                if info.url then
+                    url_hint = "\nSubmit: " .. submit_url_from_problem_url(info.url)
+                end
+                notify("Solution copied to clipboard — paste with " .. paste_key .. ", select GNU G++17 7.3.0, click Submit." .. url_hint)
             end
 
             local function run_tests(info, on_ac)
