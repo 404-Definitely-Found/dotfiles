@@ -54,6 +54,7 @@ return {
             local is_mac = vim.fn.has("mac") == 1
             local copy_cmd = is_mac and "pbcopy" or "xclip -selection clipboard"
             local open_cmd = is_mac and "open" or "xdg-open"
+            local compiler = is_mac and "g++-15" or "g++-14"
 
             local function do_submit(info)
                 vim.fn.system(copy_cmd .. " < " .. vim.fn.shellescape(info.file))
@@ -68,7 +69,7 @@ return {
             local function run_tests(info, on_ac)
                 notify("Compiling...")
                 vim.system(
-                    { "g++-15", "-std=c++17", "-O2", "-Wall", "-g",
+                    { compiler, "-std=c++17", "-O2", "-Wall", "-g",
                       "-fsanitize=address,undefined", "-o", info.binary, info.file },
                     { text = true },
                     function(compile)
