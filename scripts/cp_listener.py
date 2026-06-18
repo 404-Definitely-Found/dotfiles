@@ -57,7 +57,8 @@ def open_in_wezterm(cpp_file, notes_file):
     if shutil.which("wezterm"):
         subprocess.Popen(["wezterm", "cli", "spawn", "--", "bash", "-lc", cmd])
     elif shutil.which("tmux"):
-        subprocess.Popen(["tmux", "new-window", "-n", os.path.basename(cpp_file), cmd])
+        subprocess.run(["tmux", "new-session", "-d", "-s", "main"], capture_output=True)
+        subprocess.Popen(["tmux", "new-window", "-t", "main:", "-n", os.path.basename(cpp_file), cmd])
 
 
 class Handler(BaseHTTPRequestHandler):
