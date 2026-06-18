@@ -1,0 +1,11 @@
+Host pi4
+  HostName 100.80.40.44
+  User chnmtrvd
+  IdentityFile ~/.ssh/pi_key
+  UseKeychain yes
+  AddKeysToAgent yes
+
+Host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/testkey
