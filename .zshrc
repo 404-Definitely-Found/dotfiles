@@ -50,3 +50,4 @@ cftest() {
     g++-15 -std=c++17 -O2 -Wall -g -fsanitize=address,undefined -o "$binary" "$file" && \
     oj t -c "$binary" -d "$testdir"
 }
+export PATH="$HOME/.npm-global/bin:$PATH"
