@@ -1,30 +1,11 @@
-# Auto-start CP listener (PID file prevents duplicates)
-_CP_PID=/tmp/cp_listener.pid
-if [ -f "$_CP_PID" ] && kill -0 $(cat "$_CP_PID") 2>/dev/null; then
-    : # already running
-else
-    python3 ~/scripts/cp_listener.py >> /tmp/cp_listener.log 2>&1 &
-    echo $! > "$_CP_PID"
-fi
-
-# Watch listener output
-cplog() { tail -f /tmp/cp_listener.log; }
-
-# SSH to Pi — stops local listener first (port 10043 forwarded to Pi)
-pi4() {
-    kill $(cat /tmp/cp_listener.pid 2>/dev/null) 2>/dev/null
-    ssh pi4
-    python3 ~/scripts/cp_listener.py >> /tmp/cp_listener.log 2>&1 &
-    echo $! > /tmp/cp_listener.pid
-}
-
-# Restart listener manually
+# CP listener runs on Pi (central hub). Start locally only if needed.
 cpstart() {
     kill $(cat /tmp/cp_listener.pid 2>/dev/null) 2>/dev/null
     python3 ~/scripts/cp_listener.py >> /tmp/cp_listener.log 2>&1 &
     echo $! > /tmp/cp_listener.pid
-    echo "CP listener restarted"
+    echo "CP listener started locally"
 }
+cplog() { ssh pi4 'tail -f /tmp/cp_listener.log'; }
 
 # Open problem (moves from inbox if needed, creates if new)
 # Usage: cf rating_800_1000/4A
@@ -66,6 +47,6 @@ cftest() {
     local file="$CF/$folder/$pid/$pid.cpp"
     local binary="/tmp/cf_$pid"
     local testdir="$CF/$folder/$pid/test"
-    g++-14 -std=c++17 -O2 -Wall -g -fsanitize=address,undefined -o "$binary" "$file" && \
+    g++-15 -std=c++17 -O2 -Wall -g -fsanitize=address,undefined -o "$binary" "$file" && \
     oj t -c "$binary" -d "$testdir"
 }
