@@ -2,8 +2,9 @@ Host pi4
   HostName 100.80.40.44
   User chnmtrvd
   IdentityFile ~/.ssh/pi_key
-  UseKeychain yes
   AddKeysToAgent yes
+  LocalForward 10043 localhost:10043
+  ExitOnForwardFailure no
 
 Host github.com
   AddKeysToAgent yes

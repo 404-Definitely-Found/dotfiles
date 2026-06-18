@@ -10,6 +10,14 @@ fi
 # Watch listener output
 cplog() { tail -f /tmp/cp_listener.log; }
 
+# SSH to Pi — stops local listener first (port 10043 forwarded to Pi)
+pi4() {
+    kill $(cat /tmp/cp_listener.pid 2>/dev/null) 2>/dev/null
+    ssh pi4
+    python3 ~/scripts/cp_listener.py >> /tmp/cp_listener.log 2>&1 &
+    echo $! > /tmp/cp_listener.pid
+}
+
 # Restart listener manually
 cpstart() {
     kill $(cat /tmp/cp_listener.pid 2>/dev/null) 2>/dev/null
