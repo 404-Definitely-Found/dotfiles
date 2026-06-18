@@ -58,6 +58,6 @@ cftest() {
     local file="$CF/$folder/$pid/$pid.cpp"
     local binary="/tmp/cf_$pid"
     local testdir="$CF/$folder/$pid/test"
-    g++-15 -std=c++17 -O2 -Wall -g -fsanitize=address,undefined -o "$binary" "$file" && \
+    g++-14 -std=c++17 -O2 -Wall -g -fsanitize=address,undefined -o "$binary" "$file" && \
     oj t -c "$binary" -d "$testdir"
 }
