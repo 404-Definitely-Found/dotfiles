@@ -5,6 +5,10 @@ return {
         config = function()
             require("mason").setup()
 
+            local query_driver = vim.fn.has("mac") == 1
+                and '--query-driver=/opt/homebrew/bin/g++-15'
+                or  '--query-driver=/usr/bin/g++-14'
+
             vim.lsp.config('clangd', {
                 cmd = {
                     'clangd',
@@ -12,7 +16,7 @@ return {
                     '--clang-tidy',
                     '--completion-style=detailed',
                     '--header-insertion=never',
-                    '--query-driver=/opt/homebrew/bin/g++-15',
+                    query_driver,
                 },
                 filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
                 root_markers = { 'compile_commands.json', 'compile_flags.txt', '.clang-format', '.git' },
