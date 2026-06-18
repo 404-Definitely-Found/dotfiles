@@ -51,13 +51,18 @@ return {
                 return url
             end
 
+            local is_mac = vim.fn.has("mac") == 1
+            local copy_cmd = is_mac and "pbcopy" or "xclip -selection clipboard"
+            local open_cmd = is_mac and "open" or "xdg-open"
+
             local function do_submit(info)
-                vim.fn.system("pbcopy < " .. vim.fn.shellescape(info.file))
+                vim.fn.system(copy_cmd .. " < " .. vim.fn.shellescape(info.file))
                 if info.url then
                     local url = submit_url_from_problem_url(info.url)
-                    vim.fn.system("open " .. vim.fn.shellescape(url))
+                    vim.fn.system(open_cmd .. " " .. vim.fn.shellescape(url))
                 end
-                notify("Solution copied to clipboard — paste with Cmd+V, select GNU G++17 7.3.0, click Submit.")
+                local paste_key = is_mac and "Cmd+V" or "Ctrl+V"
+                notify("Solution copied to clipboard — paste with " .. paste_key .. ", select GNU G++17 7.3.0, click Submit.")
             end
 
             local function run_tests(info, on_ac)
