@@ -55,6 +55,8 @@ return {
             local copy_cmd = is_mac and "pbcopy" or "xclip -selection clipboard"
             local open_cmd = is_mac and "open" or "xdg-open"
             local compiler = is_mac and "g++-15" or "g++-14"
+            local oj_bin = vim.fn.exepath("oj") ~= "" and vim.fn.exepath("oj")
+                or (vim.fn.expand("~/.local/bin/oj"))
 
             local function do_submit(info)
                 vim.fn.system(copy_cmd .. " < " .. vim.fn.shellescape(info.file))
@@ -79,7 +81,7 @@ return {
                         end
                         notify("Running tests...")
                         vim.system(
-                            { "oj", "t", "-c", info.binary, "-d", info.testdir },
+                            { oj_bin, "t", "-c", info.binary, "-d", info.testdir },
                             { text = true },
                             function(test)
                                 local out = (test.stdout or "") .. (test.stderr or "")
