@@ -125,4 +125,4 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print("CP listener :10043 — click Competitive Companion on any CF problem\n")
-    HTTPServer(("localhost", 10043), Handler).serve_forever()
+    HTTPServer(("0.0.0.0", 10043), Handler).serve_forever()
