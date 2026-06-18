@@ -6,6 +6,7 @@ Fetches rating from CF API, creates per-problem subfolder, auto-opens nvim in We
 import json
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 import urllib.request
@@ -52,11 +53,11 @@ def parse_problem(url):
 
 
 def open_in_wezterm(cpp_file, notes_file):
-    try:
-        cmd = f"nvim {shlex.quote(cpp_file)}"
+    cmd = f"nvim {shlex.quote(cpp_file)}"
+    if shutil.which("wezterm"):
         subprocess.Popen(["wezterm", "cli", "spawn", "--", "bash", "-lc", cmd])
-    except FileNotFoundError:
-        pass  # wezterm not found, user opens manually
+    elif shutil.which("tmux"):
+        subprocess.Popen(["tmux", "new-window", "-n", os.path.basename(cpp_file), cmd])
 
 
 class Handler(BaseHTTPRequestHandler):
